@@ -10,7 +10,6 @@ fi
 # 脚本保存路径
 SCRIPT_PATH="$HOME/Taiko.sh"
 
-
 # 自动设置快捷键的功能
 function check_and_set_alias() {
     local alias_name="taiko"
