@@ -10,6 +10,7 @@ fi
 # 脚本保存路径
 SCRIPT_PATH="$HOME/Taiko.sh"
 
+
 # 自动设置快捷键的功能
 function check_and_set_alias() {
     local alias_name="taiko"
@@ -149,10 +150,11 @@ sed -i "s|BOOT_NODES=.*|BOOT_NODES=enode://0b310c7dcfcf45ef32dde60fec274af88d52c
 echo "用户信息已配置完毕。"
 
 # 升级所有已安装的包
-sudo yum upgrade -y
+sudo yum update -y
 
 # 安装基本组件
-sudo yum install -y pkgconfig curl gcc gcc-c++ openssl-devel clang-devel ufw
+sudo yum install epel-release -y
+sudo yum install pkgconfig curl gcc-c++ openssl-devel clang ufw -y
 
 # 检查 Docker 是否已安装
 if ! command -v docker &> /dev/null
@@ -161,22 +163,18 @@ then
     echo "未检测到 Docker，正在安装..."
     sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
-    # 设置 Docker 仓库
+    # 添加 Docker 官方 GPG 密钥
     sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
     # 安装 Docker 最新版本
     sudo yum install docker-ce docker-ce-cli containerd.io -y
-
-    # 启动 Docker 服务
     sudo systemctl start docker
-
-    # 设置 Docker 开机启动
     sudo systemctl enable docker
 else
     echo "Docker 已安装。"
 fi
 
-# 安装 Docker compose 最新版本
+    # 安装 Docker compose 最新版本
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 mkdir -p $DOCKER_CONFIG/cli-plugins
 curl -SL https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
@@ -300,7 +298,7 @@ function update_beacon_bootnode() {
 # 主菜单
 function main_menu() {
     clear
-    echo "脚本以及教程由推特用户大赌哥 @y95277777 编写，cyberdruid改成centos的，免费开源，请勿相信收费"
+    echo "脚本以及教程由推特用户大赌哥 @y95277777 编写，免费开源，请勿相信收费"
     echo "=====================安装及常规修改功能========================="
     echo "节点社区 Telegram 群组:https://t.me/niuwuriji"
     echo "节点社区 Telegram 频道:https://t.me/niuwuriji"
